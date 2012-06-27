@@ -66,3 +66,5 @@ invalid(function (mac) {
   hi(); bye();
 })
 
+
+console.log('PASSED')
