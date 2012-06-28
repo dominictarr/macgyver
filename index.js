@@ -27,13 +27,19 @@ var exports = module.exports = function () {
     contract.rules = wrapped.rules = []
     contracts[id] = contract
     function wrapped () {
+      var r
       contract.called ++
       var args = [].slice.call(arguments)
-      contract.rules.forEach(function (c) {
-        if(c.before) c.before.call(contract, args)
+      contract.rules.forEach(function (rule) {
+        if(rule.before) rule.before.call(contract, args)
       })
       //actually call the function...
-      funx.apply(this, args)
+      r = funx.apply(this, args)
+      //after
+      contract.rules.forEach(function (rule) {
+        if(rule.after) rule.after.call(contract, r)
+      })
+      return r
       //also, have after, have around...
     }
     wrapped.id = id
