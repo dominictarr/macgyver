@@ -104,31 +104,45 @@ exports.atMost = function (n) {
   return exports.isCalled.call(this, null, n)
 }
 
+function fail(con, oCon) {
+  var err = new Error('contract failed: '
+    + abbrev(con.function)
+    + ' *must* be called before '
+    + abbrev(oCon.function)
+    + ' but it was called after'
+  )
+  err.type = 'contract'
+  throw err
+}
 
-
-exports.before = function (other) {
+function expectWrapped(name, other) {
   if(!other.id)
-    throw new Error('before must be passed a function wraped by macgyver')
+    throw new Error(name + ' must be passed a function wraped by macgyver') 
+}
+
+//to assert something is called before something else
+//it is only necessary to check when it is called.
+//there is no end validation,
+//to assert something was called, use isCalled
+exports.before = function (other) {
+  expectWrapped('before', other)
   var oCon = this.get(other)
-  function fail(con) {
-    var err = new Error('contract failed: '
-      + abbrev(con.function)
-      + ' *must* be called before '
-      + abbrev(oCon.function)
-      + ' but it was called after'
-    )
-    err.type = 'contract'
-    throw err
-  }
-  //to assert something is called before something else
-  //it is only necessary to check when it is called.
-  //there is no end validation,
-  //to assert something was called, use isCalled
   return {
     before: function (args) {
-      if(oCon.called) fail(this)
+      if(oCon.called) fail(this, oCon)
     }
   }
+}
+
+exports.beforeReturns = function (other) {
+  expectWrapped('before', other)
+  var oCon = this.get(other)
+  return {
+    before: function (args) {
+      if(oCon.returned) fail(this, oCon)
+    }
+  }
+
 }
 
 

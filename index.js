@@ -18,7 +18,8 @@ var exports = module.exports = function () {
     //if(funx.id) return funx
     var id = createId()
     var contract = {
-      called: 0, 
+      called: 0,   //counter of calls
+      returned: 0, //counter of returns
       function: funx, 
       get: function (id) {
         return contracts[typeof id == 'string' ? id : id.id]
@@ -37,18 +38,20 @@ var exports = module.exports = function () {
       var i = contract.rules.length - 1
       
       function next () {
-        console.log(i)
         var args = [].slice.call(arguments)
         var around 
-          console.log(~i, contract.rules[i])
  
-        while(~i && !(around = contract.rules[i--].around));
-        if(around)
-          return around.call(contract, next, this, args)
-        else
-          return funx.apply(this, args) 
+        while(~i && !(around = contract.rules[i--].around))
+          ;
+        return ( around 
+          ? around.call(contract, next, this, args)
+          : funx.apply(this, args)
+          )
       }
       r = next.apply(this, args)
+      //increment count of returns 
+      //(this is useful for asserting when something may happen before a call ends)
+      contract.returned ++
       //after
       contract.rules.forEach(function (rule) {
         if(rule.after) rule.after.call(contract, r)
