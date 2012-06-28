@@ -1,3 +1,5 @@
+var a = require('assertions')
+
 function ifNull(n) {
   return n == null ? -1 : n
 }
@@ -13,28 +15,47 @@ function between (called, min, max) {
   return true 
 }
 
+function plural (n) {
+  return n > 1 ? ' times' : ' time'
+}
+
 function rangeDesc(min, max) {
-  function plural (n) {
-    return n > 1 ? ' times.' : ' time.'
-  }
-  var s = (
+  min = min == null ? null : min
+  max = max == null ? null : max
+
+  var s = ({
+    '1:1'   : '*must* be called exactly once',
+    '0:0'   : '*must* not be called',
+    'null:1': '*may* be called',
+    '1:null': '*must* eventually be called',
+  })[min+':'+max] 
+
+  if (s) return s
+
+  
+  var a = (
       min == null ? '' :
       'at least ' + min + plural(min)
     )
-    s += (
+  var b = (
        max == null ? '' :
       'at most ' + max + plural(max)
     )
+  s = '*must* be called ' + (a && b ? a + ', and ' + b : a || b)
+
     return s
 }
 
 exports.isCalled = function (min, max) {
+    if(min != null && max != null)
+      if (min > max) throw new Error('min must be smaller than max')
+
    function error (con) { 
       var err = new Error('contract failed: ' 
-        + abbrev(con.function)
-        + ' *must* be called '
+        + abbrev(con.function) 
+        + ' '
         + rangeDesc(min, max)
-        + ' but was called ' + con.called + ' times.'
+        + ', but was called ' + con.called + plural(con.called) + '.'
       )
       err.type = 'contract'
       throw err 
@@ -56,6 +77,34 @@ exports.isCalled = function (min, max) {
     }
   }
 }
+
+exports.once = function () {
+  return exports.isCalled.call(this, 1, 1)
+}
+
+exports.eventually = function () {
+  return exports.isCalled.call(this, null, 1)
+}
+
+exports.never = function () {
+  return exports.isCalled.call(this, 0, 0)
+}
+
+exports.maybeOnce = function () {
+  return exports.isCalled.call(this, null, 1)
+}
+
+exports.atLeast = function (n) {
+  if(n < 1) throw new Error('ArgumentError: atLeast(n): n *must* be greater or equal to 1')
+  return exports.isCalled.call(this, n, null)
+}
+
+exports.atMost = function (n) {
+  if(n < 1) throw new Error('ArgumentError: atMost(n): n *must* be greater or equal to 1')
+  return exports.isCalled.call(this, null, n)
+}
+
+
 
 exports.before = function (other) {
   if(!other.id)
@@ -82,3 +131,15 @@ exports.before = function (other) {
   }
 }
 
+
+exports.returns = function (value) {
+  //if('function' == typeof value)
+  return {
+    after: function (returned) {
+      if('function' == typeof value)
+        value(returned)
+      else
+        a.equal(returned, value)  
+    }
+  }
+}
