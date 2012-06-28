@@ -5,9 +5,9 @@
 , "repository": 
   { "type": "git"
   , "url": "https://github.com/dominictarr/macgyver.git" }
-, "dependencies": {}
-, "devDependencies": {
+, "dependencies": {
     "assertions": "2.3"
   }
+, "devDependencies": {}
 , "author": "Dominic Tarr <dominic.tarr@gmail.com> (http://bit.ly/dominictarr)"
 , "scripts": { "test": "node test/index.js" } }
