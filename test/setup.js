@@ -12,6 +12,8 @@ function test (funx, pass) {
     if(!pass) return console.error('expected err:', err.message)
     throw err
   }
+  if(!pass)
+    throw new Error('expected macgyver test to pass')
 }
 
 function valid (funx) {
