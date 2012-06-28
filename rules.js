@@ -143,3 +143,16 @@ exports.returns = function (value) {
     }
   }
 }
+
+exports.throws = function (test) {
+  return {
+    around: function (funx, context, args) {
+      try {
+        funx.apply(context, args)
+      } catch (err) {
+        return test && test(err)
+      }
+      throw new Error('function: ' + this.function + ' *must* throw')
+    }
+  }
+}

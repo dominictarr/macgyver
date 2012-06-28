@@ -34,7 +34,21 @@ var exports = module.exports = function () {
         if(rule.before) rule.before.call(contract, args)
       })
       //actually call the function...
-      r = funx.apply(this, args)
+      var i = contract.rules.length - 1
+      
+      function next () {
+        console.log(i)
+        var args = [].slice.call(arguments)
+        var around 
+          console.log(~i, contract.rules[i])
+ 
+        while(~i && !(around = contract.rules[i--].around));
+        if(around)
+          return around.call(contract, next, this, args)
+        else
+          return funx.apply(this, args) 
+      }
+      r = next.apply(this, args)
       //after
       contract.rules.forEach(function (rule) {
         if(rule.after) rule.after.call(contract, r)
