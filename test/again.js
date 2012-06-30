@@ -12,19 +12,23 @@ function goodbye () {
   console.log('byebye')
 }
 
-invalid('once() called 0', function (mac) {
-//  console.log(mac(hello))
+valid('once() then again()', function (mac) {
   var hi = mac(hello).once()
-})
-
-valid('once() called 1', function (mac) {
-  var hi = mac(hello).once()
+  hi()
+  hi.again()
   hi()
 })
 
-invalid('once() called 2', function (mac) {
+invalid('once(), called, again(), but not called', function (mac) {
   var hi = mac(hello).once()
-  hi(); hi()
+  hi()
+  hi.again()
+//  hi.isCalled(null, null, 1)
 })
 
+valid('once(), then retracted again(-1)', function (mac) {
+  var hi = mac(hello).once()
+  hi.again(-1)
+//  hi.isCalled(null, null, 1)
+})
 

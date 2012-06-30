@@ -1,5 +1,5 @@
 var a = require('assertions')
-var s = require('./setup')
+var s = require('./setup')(module)
 
 var invalid = s.invalid
 var valid = s.valid
@@ -10,12 +10,12 @@ function returns (_r) {
   return _r || r
 }
 
-valid(function (mac) {
+valid('returns() returns correct', function (mac) {
   var rs = mac(returns).returns(r)
   rs()
 })
 
-invalid(function (mac) {
+invalid('returns(), but return different', function (mac) {
   var rs = mac(returns).returns('hello')
   rs()
 })
@@ -23,12 +23,12 @@ invalid(function (mac) {
 //if passed a function, use that function as an assertion
 //not to test equal
 
-valid(function (mac) {
+valid('returns() with assertion', function (mac) {
   var rs = mac(returns).returns(a._isNumber())
   rs()
 })
 
-invalid(function (mac) {
+invalid('returns() with failing assertion', function (mac) {
   var rs = mac(returns).returns(a._isNumber())
   rs('hello')
 })

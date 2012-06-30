@@ -1,5 +1,5 @@
 var a = require('assertions')
-var s = require('./setup')
+var s = require('./setup')(module)
 
 var invalid = s.invalid
 var valid = s.valid
@@ -16,7 +16,7 @@ function createObj() {
   }
 }
 
-valid(function (mac) {
+valid('beforeReturns()', function (mac) {
   var obj = createObj()
   obj.b = mac(obj.b)
   obj.a = mac(obj.a).beforeReturns(obj.b)
@@ -25,7 +25,7 @@ valid(function (mac) {
   obj.b() 
 })
 
-valid(function (mac) {
+valid('beforeReturns() but only one time', function (mac) {
   var obj = createObj()
   obj.b = mac(obj.b)
   obj.a = mac(obj.a).beforeReturns(obj.b)
@@ -33,7 +33,7 @@ valid(function (mac) {
   obj.b()//because b calls a 
 })
 
-invalid(function (mac) {
+invalid('beforeReturns() twice', function (mac) {
   var obj = createObj()
   obj.b = mac(obj.b)
   obj.a = mac(obj.a).beforeReturns(obj.b)

@@ -1,15 +1,20 @@
-{ "name": "macgyver"
-, "version": "1.3.0"
-, "description": ""
-, "homepage": "http://github.com/dominictarr/macgyver"
-, "repository": 
-  { "type": "git"
-  , "url": "https://github.com/dominictarr/macgyver.git" }
-, "dependencies": {
+{
+  "name": "macgyver",
+  "version": "1.3.0",
+  "description": "",
+  "homepage": "http://github.com/dominictarr/macgyver",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dominictarr/macgyver.git"
+  },
+  "dependencies": {
     "assertions": "2.3"
+  },
+  "devDependencies": {
+    "synct": "~1.0.0"
+  },
+  "author": "Dominic Tarr <dominic.tarr@gmail.com> (http://bit.ly/dominictarr)",
+  "scripts": {
+    "test": "synct test/*.js"
   }
-, "devDependencies": {
-    "tap": "0.2"
-  }
-, "author": "Dominic Tarr <dominic.tarr@gmail.com> (http://bit.ly/dominictarr)"
-, "scripts": { "test": "tap test/*.js" } }
+}
