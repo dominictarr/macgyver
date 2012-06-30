@@ -16,7 +16,25 @@ valid('throws()', function (mac) {
 })
 
 invalid('throws()', function (mac) {
-  var t = mac(noop).throws(console.log)
+  var t = mac(noop).throws(function (err, threw) {
+      console.log(err, threw)
+      if(!threw) throw new Error('DID NOT THROW')
+    })
   t()
 })
+
+valid('throwing skips returns', function (mac) {
+  var returnChecked = false
+  var t = mac(throwIt)
+    .returns(function () {
+      returnChecked = true
+    })
+    .throws(function (err, threw) {
+      console.log('throws', err, threw)
+    })
+
+  t()
+  a.equal(returnChecked, false)
+})
+
 
