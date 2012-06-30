@@ -27,6 +27,7 @@ var exports = module.exports = function () {
     var contract = {
       called: 0,   //counter of calls
       returned: 0, //counter of returns
+      throws: 0,
       function: funx, 
       get: function (id) {
         return contracts[typeof id == 'string' ? id : id.id]
@@ -43,7 +44,7 @@ var exports = module.exports = function () {
         if(rule.before) rule.before.call(contract, args)
       })
       //actually call the function...
-      var i = contract.rules.length - 1
+      var i = contract.rules.length - 1, threw
       
       function next () {
         var args = [].slice.call(arguments)
@@ -53,12 +54,16 @@ var exports = module.exports = function () {
           ;
         return ( around 
           ? around.call(contract, next, this, args)
-          : funx.apply(this, args)
+          : (function () { 
+              try { return funx.apply(this, args) } 
+              catch (err) { threw = true; throw err } 
+            }).call(this)
           )
       }
       r = next.apply(this, args)
       //increment count of returns 
       //(this is useful for asserting when something may happen before a call ends)
+      if(threw) return contract.throws ++
       contract.returned ++
       //after
       contract.rules.forEach(function (rule) {

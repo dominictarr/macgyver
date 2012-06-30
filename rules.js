@@ -190,12 +190,17 @@ exports.isPassed = function (value) {
 exports.throws = function (test) {
   return {
     around: function (funx, context, args) {
+      var r
       try {
-        funx.apply(context, args)
+        r = funx.apply(context, args)
       } catch (err) {
-        return test && test(err)
+        return test && test(err, true)
       }
-      throw new Error('function: ' + this.function + ' *must* throw')
+      if(test)
+        test(undefined, false)
+      else 
+        throw new Error('function: ' + this.function + ' *must* throw')
+      return r
     }
   }
 }
