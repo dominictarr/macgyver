@@ -63,6 +63,7 @@ exports.isCalled = function (min, max) {
 
    return {
     //soft validation, triggered before the
+    id: 'isCalled',
     before: function (args) {
       //soft validation. fail if a call was 
       //against the rule.
@@ -73,6 +74,16 @@ exports.isCalled = function (min, max) {
       //hard check against the contract.
       //triggered manually, or on process.exit.
       if(!between(this.called, min, max))
+        error(this)
+    },
+    update: function (_min, _max, change) {
+      if(change) { 
+          min == null || (min += change)
+          max == null || (max += change)
+      } else 
+        min = _min; max = _max
+
+      if(max != null && this.called > max)
         error(this)
     }
   }
@@ -102,6 +113,12 @@ exports.atLeast = function (n) {
 exports.atMost = function (n) {
   if(n < 1) throw new Error('ArgumentError: atMost(n): n *must* be greater or equal to 1')
   return exports.isCalled.call(this, null, n)
+}
+
+exports.again = function (n) {
+  //tell isCalled to increment expectations
+  console.log(n,  n == null ? 1 : n)
+  return this.wrapped.isCalled.call(this, null, null, n == null ? 1 : n)
 }
 
 function fail(con, oCon) {
@@ -142,7 +159,6 @@ exports.beforeReturns = function (other) {
       if(oCon.returned) fail(this, oCon)
     }
   }
-
 }
 
 
@@ -153,10 +169,23 @@ exports.returns = function (value) {
       if('function' == typeof value)
         value(returned)
       else
-        a.equal(returned, value)  
+        a.equal(returned, value) //, 'function: ' + this.function + ' *must* return ' + JSON.stringify(value))  
     }
   }
 }
+
+exports.isPassed = function (value) {
+  //if('function' == typeof value)
+  return {
+    before: function (args) {
+      if('function' == typeof value)
+        value(args)
+      else
+        a.deepEqual(args, value) //, 'function: ' + this.function + '*must* be passed' + JSON.stringify(value))  
+    }
+  }
+}
+
 
 exports.throws = function (test) {
   return {

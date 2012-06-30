@@ -8,6 +8,13 @@ function createId () {
   )
 }
 
+function find (array, id) {
+  if(!id) return
+  for (var k in array) {
+    if(array[k].id == id) return array[k]
+  }
+}
+
 //create a macgyver context
 var exports = module.exports = function () {
 
@@ -26,6 +33,7 @@ var exports = module.exports = function () {
       }
     }
     contract.rules = wrapped.rules = []
+    contract.wrapped = wrapped
     contracts[id] = contract
     function wrapped () {
       var r
@@ -64,9 +72,12 @@ var exports = module.exports = function () {
     for (var k in rules) {
       ;(function (k){
         wrapped[k] = function () {
-          var args = [].slice.call(arguments) 
-          contract.rules
-            .push(rules[k].apply(contract, args))
+          var args = [].slice.call(arguments)
+          //some rules don't make sense to duplicate.
+          var rule = find(contract.rules, k)
+          if(rule) return rule.update.apply(contract, args)
+          rule = rules[k].apply(contract, args)
+          if(rule) contract.rules.push(rule)
           return this
         }
       })(k)
