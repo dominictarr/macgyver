@@ -1,3 +1,5 @@
+'use strict';
+
 var inherits = require('util').inherits
 var rules = require('./rules')
 
@@ -37,14 +39,13 @@ var exports = module.exports = function () {
     contract.wrapped = wrapped
     contracts[id] = contract
     function wrapped () {
-      var r
       contract.called ++
       var args = [].slice.call(arguments)
       contract.rules.forEach(function (rule) {
         if(rule.before) rule.before.call(contract, args)
       })
       //actually call the function...
-      var i = contract.rules.length - 1, threw
+      var i = contract.rules.length - 1, threw, returned
       
       function next () {
         var args = [].slice.call(arguments)
@@ -55,21 +56,21 @@ var exports = module.exports = function () {
         return ( around 
           ? around.call(contract, next, this, args)
           : (function () { 
-              try { return funx.apply(this, args) } 
+              try { return returned = funx.apply(this, args) } 
               catch (err) { threw = true; throw err } 
             }).call(this)
           )
       }
-      r = next.apply(this, args)
+      next.apply(this, args)
       //increment count of returns 
       //(this is useful for asserting when something may happen before a call ends)
-      if(threw) return contract.throws ++
+      if(threw) { contract.throws ++; return }
       contract.returned ++
       //after
       contract.rules.forEach(function (rule) {
-        if(rule.after) rule.after.call(contract, r)
+        if(rule.after) rule.after.call(contract, returned)
       })
-      return r
+      return returned
       //also, have after, have around...
     }
     wrapped.id = id
