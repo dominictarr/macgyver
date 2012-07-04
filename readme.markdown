@@ -45,9 +45,7 @@ hi(); hi(); bye()
 mac.validate()
 ```
 
-here is a real life example:
-
-https://github.com/dominictarr/event-stream/blob/master/test/spec.js#L13-57 
+here is a real life example: [dominictarr/event-stream/test/spec.js](https://github.com/dominictarr/event-stream/blob/3f4f5cb57fb61144751ab5fe643b8974ab9007aa/test/spec.js#L14-56)
 
 ## API
 
