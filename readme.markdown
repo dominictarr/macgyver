@@ -31,7 +31,7 @@ var hi = mac(hello)
 
 hi.isCalled(1, 7) //must be called between 1 and 7 times.
 
-var bye = mac(goodbye).isCalled(1, 1) //must be called strictly once.
+var bye = mac(goodbye).once() //must be called strictly once.
 
 hi.before(bye) //hi must be called strictly before bye is called
 
@@ -44,6 +44,10 @@ hi(); hi(); bye()
 
 mac.validate()
 ```
+
+here is a real life example:
+
+https://github.com/dominictarr/event-stream/blob/master/test/spec.js#L13-57 
 
 ## more coming!
 
