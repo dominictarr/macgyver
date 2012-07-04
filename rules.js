@@ -117,7 +117,6 @@ exports.atMost = function (n) {
 
 exports.again = function (n) {
   //tell isCalled to increment expectations
-  console.log(n,  n == null ? 1 : n)
   return this.wrapped.isCalled.call(this, null, null, n == null ? 1 : n)
 }
 
