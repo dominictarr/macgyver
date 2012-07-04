@@ -23,6 +23,8 @@ var exports = module.exports = function () {
   var contracts = {}
   var macgyver = function wrap(funx) {
     //if this is already wrapped don't wrap it.
+    if('function' !== typeof funx)
+      throw new Error('macgyver *must* be passed a function')
     if(funx.id) return funx
     
     var id = createId()
