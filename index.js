@@ -21,8 +21,8 @@ var exports = module.exports = function () {
   var contracts = {}
   var macgyver = function wrap(funx) {
     //if this is already wrapped don't wrap it.
-    //hmm, no allow this so that two contexts may wrap.
-    //if(funx.id) return funx
+    if(funx.id) return funx
+    
     var id = createId()
     var contract = {
       called: 0,   //counter of calls
