@@ -3,10 +3,23 @@ var a = require('assertions')
 function ifNull(n) {
   return n == null ? -1 : n
 }
+function p(s) {
+  return '('+s+')'
+}
+function bt(s) {
+  return '`' + s + '`'
+}
 
-function abbrev (func) {
-  func = func.toString()
-  return func.length < 80 ? func : func.substring(0, 100) + '...'
+function abbrev (contract) {
+
+  var func = contract.function.toString()
+  var name = contract.name
+
+  return [
+    (name ? bt(name) : ''), 
+    p( func.length < 80 
+      ? func : func.substring(0, 100) + '...')
+  ].join(': ')
 }
 
 function between (called, min, max) {
@@ -16,7 +29,7 @@ function between (called, min, max) {
 }
 
 function plural (n) {
-  return n > 1 ? ' times' : ' time'
+  return n > 1 || n === 0 ? ' times' : ' time'
 }
 
 function rangeDesc(min, max) {
@@ -31,8 +44,7 @@ function rangeDesc(min, max) {
   })[min+':'+max] 
 
   if (s) return s
-
-  
+ 
   var a = (
       min == null ? '' :
       'at least ' + min + plural(min)
@@ -49,13 +61,19 @@ function rangeDesc(min, max) {
 exports.isCalled = function (min, max) {
     if(min != null && max != null)
       if (min > max) throw new Error('min must be smaller than max')
-
-   function error (con) { 
-      var err = new Error('contract failed: ' 
-        + abbrev(con.function) 
+   var err = new Error()
+   function error (con) {
+      err.message = (
+        'broke contract: ' 
+        + abbrev(con) 
         + ' '
         + rangeDesc(min, max)
-        + ', but was called ' + con.called + plural(con.called) + '.'
+        + ', but was '
+        + ( con.called === 0 
+          ? 'not called.'
+          : 'called ' + con.called + plural(con.called) + '.'
+        )
+        + '\ncontract defined at:'
       )
       err.type = 'contract'
       throw err 
@@ -102,7 +120,7 @@ exports.never = function () {
 }
 
 exports.maybeOnce = function () {
-  return exports.isCalled.call(this, null, 1)
+  return exports.isCalled.call(this, 0, 1)
 }
 
 exports.atLeast = function (n) {
@@ -122,9 +140,9 @@ exports.again = function (n) {
 
 function fail(con, oCon) {
   var err = new Error('contract failed: '
-    + abbrev(con.function)
+    + abbrev(con)
     + ' *must* be called before '
-    + abbrev(oCon.function)
+    + abbrev(oCon)
     + ' but it was called after'
   )
   err.type = 'contract'

@@ -21,7 +21,7 @@ function find (array, id) {
 var exports = module.exports = function () {
 
   var contracts = {}
-  var macgyver = function wrap(funx) {
+  var macgyver = function wrap(funx, name) {
     //if this is already wrapped don't wrap it.
     if('function' !== typeof funx)
       throw new Error('macgyver *must* be passed a function')
@@ -33,6 +33,7 @@ var exports = module.exports = function () {
       returned: 0, //counter of returns
       throws: 0,
       function: funx, 
+      name: name,
       get: function (id) {
         return contracts[typeof id == 'string' ? id : id.id]
       }
