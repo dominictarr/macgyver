@@ -10,6 +10,14 @@
   "dependencies": {
     "assertions": "2.3"
   },
+  "keywords": [
+    "spec",
+    "test",
+    "order",
+    "eventually",
+    "before",
+    "critical"
+  ],
   "devDependencies": {
     "synct": "~1.0.0"
   },
