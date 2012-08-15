@@ -79,6 +79,9 @@ will assert that `fun` is called not more than 10 times.
 ### once()
 alias for `isCalled (1, 1)`
 
+### times(n)
+alias for `isCalled (n, n)`
+
 ### eventually()
 alias for `isCalled (null, 1)`
 

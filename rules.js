@@ -111,6 +111,10 @@ exports.once = function () {
   return exports.isCalled.call(this, 1, 1)
 }
 
+exports.times = function (n) {
+  return exports.isCalled.call(this, n, n)
+}
+
 exports.eventually = function () {
   return exports.isCalled.call(this, null, 1)
 }
