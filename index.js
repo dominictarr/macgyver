@@ -23,6 +23,8 @@ var exports = module.exports = function () {
   var contracts = {}
   var macgyver = function wrap(funx, name) {
     //if this is already wrapped don't wrap it.
+    if('string' === typeof funx)
+      name = funx
     if('function' !== typeof funx)
       funx = function noOp() {} //default to empty function
     if(funx.id) return funx
