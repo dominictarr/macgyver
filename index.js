@@ -105,6 +105,11 @@ var exports = module.exports = function () {
     }
   }
 
+  macgyver.autoValidate = function () {
+    process.on('exit', macgyver.validate)
+    return macgyver
+  }
+
   return macgyver
 }
 
