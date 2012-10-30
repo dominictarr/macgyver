@@ -155,6 +155,10 @@ check all rules passed. must be called once you are sure all calls are finished.
 for example `process.on('exit', mac.validate)` is a good time. `validate` in necessary
 to check that lower bounds of `isCalled` and aliases where met.
 
+### autoValidate()
+
+call validate on `process.on('exit', mac.validate)`.
+
 ## more coming!
 
 ## license
