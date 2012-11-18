@@ -1,4 +1,4 @@
-var a = require('assertions')
+var assert = require("assert")
 
 function ifNull(n) {
   return n == null ? -1 : n
@@ -16,8 +16,8 @@ function abbrev (contract) {
   var name = contract.name
 
   return [
-    (name ? bt(name) : ''), 
-    p( func.length < 80 
+    (name ? bt(name) : ''),
+    p( func.length < 80
       ? func : func.substring(0, 100) + '...')
   ].join(': ')
 }
@@ -25,7 +25,7 @@ function abbrev (contract) {
 function between (called, min, max) {
   if(max != null && called > max) return false
   if(min != null && called < min) return false
-  return true 
+  return true
 }
 
 function plural (n) {
@@ -41,10 +41,10 @@ function rangeDesc(min, max) {
     '0:0'   : '*must* not be called',
     'null:1': '*may* be called',
     '1:null': '*must* eventually be called',
-  })[min+':'+max] 
+  })[min+':'+max]
 
   if (s) return s
- 
+
   var a = (
       min == null ? '' :
       'at least ' + min + plural(min)
@@ -64,26 +64,26 @@ exports.isCalled = function (min, max) {
    var err = new Error()
    function error (con) {
       err.message = (
-        'broke contract: ' 
-        + abbrev(con) 
+        'broke contract: '
+        + abbrev(con)
         + ' '
         + rangeDesc(min, max)
         + ', but was '
-        + ( con.called === 0 
+        + ( con.called === 0
           ? 'not called.'
           : 'called ' + con.called + plural(con.called) + '.'
         )
         + '\ncontract defined at:'
       )
       err.type = 'contract'
-      throw err 
+      throw err
     }
 
    return {
     //soft validation, triggered before the
     id: 'isCalled',
     before: function (args) {
-      //soft validation. fail if a call was 
+      //soft validation. fail if a call was
       //against the rule.
       if(max != null && this.called > max)
         error(this)
@@ -95,10 +95,10 @@ exports.isCalled = function (min, max) {
         error(this)
     },
     update: function (_min, _max, change) {
-      if(change) { 
+      if(change) {
           min == null || (min += change)
           max == null || (max += change)
-      } else 
+      } else
         min = _min; max = _max
 
       if(max != null && this.called > max)
@@ -159,7 +159,7 @@ function fail(con, oCon) {
 
 function expectWrapped(name, other) {
   if(!other.id)
-    throw new Error(name + ' must be passed a function wraped by macgyver') 
+    throw new Error(name + ' must be passed a function wraped by macgyver')
 }
 
 //to assert something is called before something else
@@ -194,7 +194,7 @@ exports.returns = function (value) {
       if('function' == typeof value)
         value(returned)
       else
-        a.equal(returned, value) //, 'function: ' + this.function + ' *must* return ' + JSON.stringify(value))  
+        assert.equal(returned, value) //, 'function: ' + this.function + ' *must* return ' + JSON.stringify(value))
     }
   }
 }
@@ -206,7 +206,7 @@ exports.isPassed = function (value) {
       if('function' == typeof value)
         value(args)
       else
-        a.deepEqual(args, value) //, 'function: ' + this.function + '*must* be passed' + JSON.stringify(value))  
+        assert.deepEqual(args, value) //, 'function: ' + this.function + '*must* be passed' + JSON.stringify(value))
     }
   }
 }
@@ -223,7 +223,7 @@ exports.throws = function (test) {
       }
       if(test)
         test(undefined, false)
-      else 
+      else
         throw new Error('function: ' + this.function + ' *must* throw')
       return r
     }

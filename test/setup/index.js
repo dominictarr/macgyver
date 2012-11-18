@@ -1,4 +1,3 @@
-var a = require('assertions')
 var macgyver = require('../..')
 
 module.exports = function (m) {

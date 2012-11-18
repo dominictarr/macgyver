@@ -1,4 +1,3 @@
-var a = require('assertions')
 var s = require('./setup')(module)
 
 var invalid = s.invalid

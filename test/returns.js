@@ -1,5 +1,5 @@
-var a = require('assertions')
 var s = require('./setup')(module)
+var assert = require("assert")
 
 var invalid = s.invalid
 var valid = s.valid
@@ -24,12 +24,16 @@ invalid('returns(), but return different', function (mac) {
 //not to test equal
 
 valid('returns() with assertion', function (mac) {
-  var rs = mac(returns).returns(a._isNumber())
+  var rs = mac(returns).returns(function (v) {
+    assert.equal(typeof v, "number")
+  })
   rs()
 })
 
 invalid('returns() with failing assertion', function (mac) {
-  var rs = mac(returns).returns(a._isNumber())
+  var rs = mac(returns).returns(function (v) {
+    assert.equal(typeof v, "number")
+  })
   rs('hello')
 })
 

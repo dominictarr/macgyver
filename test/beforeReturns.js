@@ -1,4 +1,3 @@
-var a = require('assertions')
 var s = require('./setup')(module)
 
 var invalid = s.invalid
@@ -22,7 +21,7 @@ valid('beforeReturns()', function (mac) {
   obj.a = mac(obj.a).beforeReturns(obj.b)
 
   obj.a()
-  obj.b() 
+  obj.b()
 })
 
 valid('beforeReturns() but only one time', function (mac) {
@@ -30,7 +29,7 @@ valid('beforeReturns() but only one time', function (mac) {
   obj.b = mac(obj.b)
   obj.a = mac(obj.a).beforeReturns(obj.b)
 
-  obj.b()//because b calls a 
+  obj.b()//because b calls a
 })
 
 invalid('beforeReturns() twice', function (mac) {
@@ -39,7 +38,7 @@ invalid('beforeReturns() twice', function (mac) {
   obj.a = mac(obj.a).beforeReturns(obj.b)
 
   obj.b()
-  obj.b()// fails because on the second call, b has returned. 
+  obj.b()// fails because on the second call, b has returned.
 })
 
 

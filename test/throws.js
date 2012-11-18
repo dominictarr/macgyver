@@ -1,5 +1,5 @@
-var a = require('assertions')
 var s = require('./setup')(module)
+var assert = require("assert")
 
 var invalid = s.invalid
 var valid = s.valid
@@ -34,7 +34,7 @@ valid('throwing skips returns', function (mac) {
     })
 
   t()
-  a.equal(returnChecked, false)
+  assert.equal(returnChecked, false)
 })
 
 
