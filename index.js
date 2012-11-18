@@ -6,7 +6,7 @@ var rules = require('./rules')
 function createId () {
   return (
     Math.random().toString(16).substring(2)
-  + Math.random().toString(16).substring(2) 
+  + Math.random().toString(16).substring(2)
   )
 }
 
@@ -28,13 +28,13 @@ var exports = module.exports = function () {
     if('function' !== typeof funx)
       funx = function noOp() {} //default to empty function
     if(funx.id) return funx
-    
+
     var id = createId()
     var contract = {
       called: 0,   //counter of calls
       returned: 0, //counter of returns
       throws: 0,
-      function: funx, 
+      function: funx,
       name: name,
       get: function (id) {
         return contracts[typeof id == 'string' ? id : id.id]
@@ -51,23 +51,23 @@ var exports = module.exports = function () {
       })
       //actually call the function...
       var i = contract.rules.length - 1, threw, returned
-      
+
       function next () {
         var args = [].slice.call(arguments)
-        var around 
- 
+        var around
+
         while(~i && !(around = contract.rules[i--].around))
           ;
-        return ( around 
+        return ( around
           ? around.call(contract, next, this, args)
-          : (function () { 
-              try { return returned = funx.apply(this, args) } 
-              catch (err) { threw = true; throw err } 
+          : (function () {
+              try { return returned = funx.apply(this, args) }
+              catch (err) { threw = true; throw err }
             }).call(this)
           )
       }
       next.apply(this, args)
-      //increment count of returns 
+      //increment count of returns
       //(this is useful for asserting when something may happen before a call ends)
       if(threw) { contract.throws ++; return }
       contract.returned ++
@@ -106,7 +106,7 @@ var exports = module.exports = function () {
   }
 
   macgyver.autoValidate = function () {
-    process.on('exit', macgyver.validate)
+    process.on && process.on('exit', macgyver.validate)
     return macgyver
   }
 
