@@ -155,9 +155,12 @@ check all rules passed. must be called once you are sure all calls are finished.
 for example `process.on('exit', mac.validate)` is a good time. `validate` in necessary
 to check that lower bounds of `isCalled` and aliases where met.
 
-### autoValidate()
+### autoValidate(browserTimeout)
 
 call validate on `process.on('exit', mac.validate)`.
+if process.on is not available (as on the browser) wait until `browserTimeout` instead.
+[testling ci](http://ci.testling.com) kills tests after 30 seconds, so by default
+`browserTimeout = 10e3` (10 seconds)
 
 ## more coming!
 
