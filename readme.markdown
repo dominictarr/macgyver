@@ -1,7 +1,7 @@
 # macgyver
 
 [![build status](https://secure.travis-ci.org/dominictarr/macgyver.png)](http://travis-ci.org/dominictarr/macgyver)
-
+[![browser status](http://ci.testling.com/dominictarr/macgyver.png)](http://ci.testling.com/dominictarr/macgyver)
 declarative assertion framework for invocation ordering.
 
 when evented code really gets _mission critical_ there is one man you send in...
