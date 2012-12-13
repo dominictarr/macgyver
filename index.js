@@ -105,8 +105,11 @@ var exports = module.exports = function () {
     }
   }
 
-  macgyver.autoValidate = function () {
-    process.on && process.on('exit', macgyver.validate)
+  macgyver.autoValidate = function (timeout) {
+    if(process.on)
+      process.on('exit', macgyver.validate)
+    else
+      setTimeout(macgyver.validate, timeout || 10e3)
     return macgyver
   }
 
