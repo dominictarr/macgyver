@@ -40,7 +40,7 @@ function rangeDesc(min, max) {
     '1:1'   : '*must* be called exactly once',
     '0:0'   : '*must* not be called',
     'null:1': '*may* be called',
-    '1:null': '*must* eventually be called',
+    '1:null': '*must* eventually be called'
   })[min+':'+max]
 
   if (s) return s
