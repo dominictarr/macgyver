@@ -106,7 +106,7 @@ var exports = module.exports = function () {
   }
 
   macgyver.autoValidate = function (timeout) {
-    if(process.on)
+    if('function' === typeof process.on)
       process.on('exit', macgyver.validate)
     else
       setTimeout(macgyver.validate, timeout || 10e3)
